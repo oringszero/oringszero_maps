@@ -9,12 +9,7 @@
     <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=<?php echo $naver_client_id;?>&submodules=geocoder"></script> 
 </head> 
 <body> 
-<div id="map" style="width:100%;height:800px;"></div> 
-<!-- <ul id="traffic_grd" style="display:none;">
-    <li data-grd-la="37.56630201" data-grd-lo="126.92395305" data-datetime="2016-10-08 14:50:00">asdf</li>
-    <li data-grd-la="37.58106754" data-grd-lo="126.91147176" data-datetime="2016-10-20 04:00:00">sdffdg</li>
-    <li data-grd-la="37.56563636" data-grd-lo="126.92980098" data-datetime="2016-11-29 10:40:00">jhktyj</li>
-</ul> -->
+<div id="map" style="width:100%;height:800px;"></div>
 <?php
     echo '<ul id="traffic_grd" style="display:none;">';
     foreach ($traffic_reault['searchResult']['accidentDeath'] as $key => $val) {
@@ -29,7 +24,6 @@
 
 
     <script>
-        var position = new Array();
         var map = new naver.maps.Map('map', {
             center: new naver.maps.LatLng(37.5666805, 126.9784147),
             zoom: 6
@@ -38,6 +32,7 @@
         var markers = [],
             infoWindows = [];
         $('#traffic_grd > li').each(function () {
+            
             var _this = $(this);
             var position = new naver.maps.LatLng( _this.data('grd-la'), _this.data('grd-lo'));
 
@@ -46,8 +41,7 @@
                 position: position,
                 zIndex: 100
             });
-            
-            
+
             naver.maps.Service.reverseGeocode({
                 location: new naver.maps.LatLng( _this.data('grd-la'), _this.data('grd-lo')),
             }, function(status, response) {
