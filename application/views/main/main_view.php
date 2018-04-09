@@ -10,20 +10,9 @@
 </head> 
 <body> 
 <div id="map" style="width:100%;height:800px;"></div>
-<?php
-    echo '<ul id="traffic_grd" style="display:none;">';
-    foreach ($traffic_reault['searchResult']['accidentDeath'] as $key => $val) {
-
-        $datetime = new DateTime($val['dt_006'].$val['dt_006_lv8'].'00');
-        $datetime = $datetime->format('Y-m-d H:i:s');
-
-        echo '<li data-grd-la="'.$val['grd_la'].'" data-grd-lo="'.$val['grd_lo'].'" data-datetime="'.$datetime.'"></li>';
-    }
-    echo '</ul>';
-?>
-
 
     <script>
+
         var map = new naver.maps.Map('map', {
             center: new naver.maps.LatLng(37.5666805, 126.9784147),
             zoom: 6
@@ -31,36 +20,55 @@
 
         var markers = [],
             infoWindows = [];
-        $('#traffic_grd > li').each(function () {
-            
-            var _this = $(this);
-            var position = new naver.maps.LatLng( _this.data('grd-la'), _this.data('grd-lo'));
 
-            var marker = new naver.maps.Marker({
-                map: map,
-                position: position,
-                zIndex: 100
-            });
+        $.ajax({
+            type        : 'get',
+            cache       : true,
+            url         : '/main/getData',
+            dataType    : 'json',
+            success	: function(data) {
+                var obj = data.searchResult.accidentDeath;
 
-            naver.maps.Service.reverseGeocode({
-                location: new naver.maps.LatLng( _this.data('grd-la'), _this.data('grd-lo')),
-            }, function(status, response) {
-                    if (status !== naver.maps.Service.Status.OK) {
-                        return alert('Something wrong!');
-                    }
+                var _this, grd_la, grd_lo, datetime;
+                $.each(obj, function(key, value) {
+                    
+                    _this = value;
+                    grd_la = _this.grd_la;
+                    grd_lo = _this.grd_lo;
+                    datetime = _this.dt_006+_this.dt_006_lv8 + '00';
 
-                    var result = response.result, // 검색 결과의 컨테이너
-                    item = result.items; // 검색 결과의 배열
-                })
-            
-            var infoWindow = new naver.maps.InfoWindow({
-                content: '<div style="width:320px;text-align:center;padding:10px;"><b>사고 발생 날짜 : '+ _this.data('datetime') +'</b></div>'
-            });
+                    var position = new naver.maps.LatLng(grd_la, grd_lo);
 
-            markers.push(marker);
-            infoWindows.push(infoWindow);
-        });        
+                    naver.maps.Service.reverseGeocode({
+                        location: position,
+                    }, function(status, response) {
+                        if (status !== naver.maps.Service.Status.OK) {
+                            return alert('Something wrong!');
+                        }
 
+                        var result = response.result, // 검색 결과의 컨테이너
+                        item = result.items; // 검색 결과의 배열
+
+                        var marker = new naver.maps.Marker({
+                            map: map,
+                            position: position,
+                            zIndex: 100
+                        });
+
+                        var infoWindow = new naver.maps.InfoWindow({
+                            content: `<div style="width:420px;text-align:center;padding:10px;"><b>사고 발생 날짜 : ${datetime}</br> 사고 장소 : ${item[0].address} </b></div>`
+                        });
+
+                        markers[key] = marker;
+                        infoWindows[key] = infoWindow;
+
+                        naver.maps.Event.addListener(markers[key], 'click', getClickHandler(key));
+                    })
+
+                });
+            }
+        });
+        
         naver.maps.Event.addListener(map, 'idle', function() {
             updateMarkers(map, markers);
         });
@@ -109,9 +117,6 @@
             }
         }
 
-        for (var i=0, ii=markers.length; i<ii; i++) {
-            naver.maps.Event.addListener(markers[i], 'click', getClickHandler(i));
-        }
     </script> 
 </body> 
 </html>
