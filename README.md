@@ -1,12 +1,12 @@
 ## Index
 2016년 서울시 사망 교통사고 정보
 
-##Language
+## Language
 Language | Link |
 |---|---|
 | PHP(5.6.34) | [Go!](http://php.net/downloads.php) |
 
-##Framework
+## Framework
 Framework | Link |
 |---|---|
 | CodeIgniter(3.0.6) | [Go!](http://www.ciboard.co.kr/user_guide/kr/installation/downloads.html) |
