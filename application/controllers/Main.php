@@ -6,7 +6,6 @@ use \GuzzleHttp\Client;
 class Main extends CI_Controller {
 	public function index()
 	{
-
         require "config.php";
         $url = 'http://apis.data.go.kr/B552061/trafficAccidentDeath/getRestTrafficAccidentDeath?servicekey='.$serviceKey.'&searchYear=2016&siDo=1100';
 
