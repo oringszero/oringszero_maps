@@ -35,7 +35,8 @@
                     _this = value;
                     grd_la = _this.grd_la;
                     grd_lo = _this.grd_lo;
-                    datetime = _this.dt_006+_this.dt_006_lv8 + '00';
+                    datetime = _this.dt_006+_this.dt_006_lv8;
+                    datetime = datetime.substring(0,4)+"-"+datetime.substring(4,6)+"-"+datetime.substring(6,8)+" "+datetime.substring(8,10)+":"+datetime.substring(10,12)+":00";
 
                     var position = new naver.maps.LatLng(grd_la, grd_lo);
 
