@@ -7,6 +7,7 @@
     <title>2016년 서울특별시 사망 교통사고 내역</title> 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
     <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=<?php echo $naver_client_id;?>&submodules=geocoder"></script> 
+    <script type="text/javascript" src="/inc/js/sugar.min.js"></script>
 </head> 
 <body> 
 <div id="map" style="width:100%;height:800px;"></div>
